@@ -27,10 +27,11 @@
 - **Public URL:**  
   `https://github.com/dishant1313/tfjzl-final-cloud-app-with-database/blob/main/onlinecourse/models.py`
 - **Key Features Implemented:**
-  - `Question`: ForeignKey to `Course`, `content` (with `question_text` property), `grade`, optional `lesson`, and `is_get_score(self, selected_ids)`.
+  - `Question`: ForeignKey to `Course`, `question_text = models.CharField(max_length=200)`, `grade = models.IntegerField(default=1)`, optional `lesson`, and `is_get_score(self, selected_ids)`.
   - `is_get_score` ensures that full credit is awarded only when all correct choices and zero incorrect choices are selected. An empty set of choices is handled safely.
-  - `Choice`: ForeignKey to `Question`, `content` (with `choice_text` property), and `is_correct` BooleanField.
-  - `Submission`: ForeignKey to `Enrollment` and `ManyToManyField(Choice)`.
+  - `Choice`: ForeignKey to `Question`, `choice_text = models.CharField(max_length=100)`, and `is_correct = models.BooleanField(default=False)`.
+  - `Submission`: ForeignKey to `Enrollment` and `ManyToManyField(Choice)`. Exact string representation implemented: `f"Submission {self.id} for enrollment {self.enrollment.id}"`.
+  - `Enrollment`: Added clean `__str__` returning `f"Enrollment {self.id}"`.
 
 ---
 
@@ -150,15 +151,16 @@ The `submission_screenshots/` folder contains all 7 required files:
 4. **Automated Unit & Integration Test Suite (`onlinecourse/tests.py`):**
    ```bash
    python manage.py test
-   # Ran 6 tests in 10.141s
+   # Ran 7 tests in 8.958s
    # OK
    ```
-   - `test_scenario_a_application_basics`: Homepage and course detail loading.
-   - `test_scenario_b_admin_registration`: Verification of all 7 registered models in admin.
-   - `test_scenario_c_successful_exam`: Correct submission, score 100/100, "Congratulations" alert.
-   - `test_scenario_d_incorrect_exam`: Incorrect submission, score 0/100, "Failed" alert, re-test link.
-   - `test_scenario_e_multiple_correct_answers`: Multi-choice grading logic (missing choice fails, extra choice fails, exact match passes).
-   - `test_scenario_f_security`: Unauthenticated access redirect, cross-user submission prevention (403), cross-course choice isolation.
+   - `test_task1_model_definitions_and_str`: Validates `question_text`, `grade` default=1, `choice_text` max_length=100, relationships, and `Submission` `__str__`.
+   - `test_task2_admin_registration`: Verification of all 7 registered models in admin.
+   - `test_task4_course_detail_template_with_and_without_questions`: Renders course details both with exam questions and without exam questions, ensuring course name and lessons remain visible.
+   - `test_task5_task6_successful_exam`: Correct submission, score 100/100, "Congratulations" alert.
+   - `test_exam_failure_and_retest`: Incorrect submission, score 0/100, "Failed" alert, re-test link.
+   - `test_multiple_choice_scoring`: Multi-choice grading logic (missing choice fails, extra choice fails, exact match passes).
+   - `test_security`: Unauthenticated access redirect, cross-user submission prevention (403), cross-course choice isolation.
 
 ---
 

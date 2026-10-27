@@ -32,7 +32,13 @@ class LessonAdmin(admin.ModelAdmin):
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
-    list_display = ['content', 'grade']
+    list_display = ['question_text', 'grade']
+    search_fields = ['question_text']
+
+
+class ChoiceAdmin(admin.ModelAdmin):
+    list_display = ['choice_text', 'is_correct']
+    search_fields = ['choice_text']
 
 
 class SubmissionAdmin(admin.ModelAdmin):
@@ -45,6 +51,6 @@ admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Instructor)
 admin.site.register(Learner)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Choice)
+admin.site.register(Choice, ChoiceAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 

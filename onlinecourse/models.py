@@ -94,26 +94,24 @@ class Enrollment(models.Model):
     mode = models.CharField(max_length=5, choices=COURSE_MODES, default=AUDIT)
     rating = models.FloatField(default=5.0)
 
+    def __str__(self):
+        return f"Enrollment {self.id}"
+
 
 # <HINT> Create a Question Model with:
     # Used to persist question content for a course
     # Has a One-To-Many (or Many-To-One) relationship with the Course model
     # Has a grade point for each question
-    # Has question content
+    # Has question text
     # Other fields and methods you would like to design
 class Question(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    content = models.CharField(max_length=200)
-    grade = models.IntegerField(default=50)
+    question_text = models.CharField(max_length=200)
+    grade = models.IntegerField(default=1)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True)
 
-    @property
-    def question_text(self):
-        return self.content
-
-    @question_text.setter
-    def question_text(self, val):
-        self.content = val
+    def __str__(self):
+        return self.question_text
 
     # <HINT> A calculate_score method:
     # calculate the question score based on the selected choice ids
@@ -125,31 +123,20 @@ class Question(models.Model):
             return True
         return False
 
-    def __str__(self):
-        return "Question: " + self.content
-
 
 #  <HINT> Create a Choice Model with:
     # Used to persist choice content for a question
     # Has a One-To-Many relationship with the Question model
-    # Choice content
+    # Choice text
     # Indicate if this choice is the correct answer or not
     # Other fields and methods you would like to design
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    content = models.CharField(max_length=200)
+    choice_text = models.CharField(max_length=100)
     is_correct = models.BooleanField(default=False)
 
-    @property
-    def choice_text(self):
-        return self.content
-
-    @choice_text.setter
-    def choice_text(self, val):
-        self.content = val
-
     def __str__(self):
-        return "Choice: " + self.content
+        return self.choice_text
 
 
 # <HINT> The Submission model:
@@ -161,5 +148,5 @@ class Submission(models.Model):
     choices = models.ManyToManyField(Choice)
 
     def __str__(self):
-        return "Submission for enrollment: " + str(self.enrollment)
+        return f"Submission {self.id} for enrollment {self.enrollment.id}"
 

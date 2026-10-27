@@ -58,19 +58,19 @@
         {% for question in course.question_set.all %}
             <div class="card mt-3">
                 <div class="card-header bg-light">
-                    <h5>Question {{ forloop.counter }}: {{ question.content }} <span class="badge badge-secondary float-right">{{ question.grade }} Points</span></h5>
+                    <h5>Question {{ forloop.counter }}: {{ question.question_text }} <span class="badge badge-secondary float-right">{{ question.grade }} Points</span></h5>
                 </div>
                 <div class="card-body">
                     {% for choice in question.choice_set.all %}
                         <div class="mb-2">
                             {% if choice in selected_choices and choice.is_correct %}
-                                <span class="text-success font-weight-bold">&#10004; Correct answer selected: {{ choice.content }}</span>
+                                <span class="text-success font-weight-bold">&#10004; Correct answer selected: {{ choice.choice_text }}</span>
                             {% elif choice in selected_choices and not choice.is_correct %}
-                                <span class="text-danger font-weight-bold">&#10008; Wrong answer selected: {{ choice.content }}</span>
+                                <span class="text-danger font-weight-bold">&#10008; Wrong answer selected: {{ choice.choice_text }}</span>
                             {% elif choice.is_correct %}
-                                <span class="text-warning font-weight-bold">&#10004; Not selected: {{ choice.content }} (Correct answer)</span>
+                                <span class="text-warning font-weight-bold">&#10004; Not selected: {{ choice.choice_text }} (Correct answer)</span>
                             {% else %}
-                                <span class="text-muted">{{ choice.content }}</span>
+                                <span class="text-muted">{{ choice.choice_text }}</span>
                             {% endif %}
                         </div>
                     {% endfor %}
